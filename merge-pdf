@@ -1,0 +1,39 @@
+#!/bin/bash
+
+#directory change prompt
+read -p 'Are the files in the current directory? [y/n]' dcp
+if [ $dcp == 'n' ]; then
+	read -p 'Insert path to files: ' path
+	cd $path	
+fi
+#zero pad 1-9 prompt
+read -p 'Do you need to zero pad the files? [y/n]' zp
+if [ $zp == 'y' ]; then
+	filename=$(ls | head -n 1)
+	name=${filename%_*}
+	exte=${filename##*.}
+	for n in $(seq 9)
+	do
+		mv $name\_$n.$exte $name\_0$n.$exte
+	done
+fi
+
+#merging prompt
+echo '1) Images to merged PDF'
+echo '2) Slides to merged PDF'
+read -p 'Insert mode: ' mode
+if [ $mode == 1 ]; then
+	convert $(for i in *.{jpg,png,jpeg,bmp}; do echo $i; done) out.pdf
+elif [ $mode == 2 ]; then
+	# slide convertion
+	for i in *.{odp,ppt,pptx}
+	do
+	unoconv -f pdf $i
+	done
+	# merge pdf
+	qpdf --empty --pages $(for i in *.pdf; do echo $i 1-z; done) -- out.pdf
+else echo 'Invalid Input'
+fi
+
+# DAMN, DAT'S HAT!
+# for j in {1..9}; do qpdf --empty --pages $(for i in ${j}_*.pdf; do echo $i 1-z; done) -- ${j}_all.pdf; done

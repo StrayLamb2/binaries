@@ -1,0 +1,37 @@
+#!/bin/sh
+if [ -z $(git config --global user.name) ]
+then
+	read -p "Enter git global username (it is not set up in your system): " gun
+	git --global user.name $gun
+fi
+
+opt=1
+echo 'Do you want to:'
+echo '1) Make a new repo'
+echo '2) Push to existing repo'
+read opt
+
+git init
+git add .
+git commit
+
+if [ $opt == '1' ]
+then
+	pri='Y'
+	read -p 'Is it a private repo [Y/n]: ' pri
+	if [ $pri == 'n' ]
+	then
+	       private=""
+      	else			
+	       private=", \"private\":true"
+  	fi
+	un=$(git config --global user.name)
+	read -p 'Enter github repo name: ' rn
+	curl -u $un https://api.github.com/user/repos -d "{\"name\":\"$rn\"$private}"
+	touch README.md
+	git remote add origin "git@github.com:"$un"/"$rn".git"
+	git remote -v
+fi
+
+git push origin HEAD
+

@@ -1,0 +1,21 @@
+#!/bin/sh 
+
+if [ $(whoami) != 'root' ]; then
+	echo 'Please use this script with sudo'
+	exit
+fi
+
+jsz=$(du -sh /var/log/journal/) #journal-size
+echo 'Journal size: ' ${jsz%%/*}
+read -p 'Do you want to vacuum your journal? [y/n] ' vprompt
+
+#adjust to your likings
+vt=5days
+vs=1G
+if [ $vprompt == 'y' ]; then
+    journalctl --vacuum-time=$vt
+    journalctl --vacuum-size=$vs
+	njsz=$(du -sh /var/log/journal/)
+	echo 'New journal size: ' ${njsz%%/*}
+fi
+
