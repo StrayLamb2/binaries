@@ -1,16 +1,18 @@
 # binaries
 My binary files, uploded to be moved easily, or for anyone that may need them.
 
-### git-auto 
+## git-auto 
 automated script to push changes on github
 
-### journal-cleaner
+## journal-cleaner
 script to keep journal-size under control
 
-### merge-pdf 
+## merge-pdf 
 script to merge many files to a pdf
 
-### display-manager  
+## display-manager
+script to fix display issues with SDDM and Plasma (needed to remove kscreen)
+
 Change the variables to your specific setup:
 - **EXT_1**  
 	Main external monitor
