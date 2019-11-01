@@ -1,0 +1,19 @@
+#!/bin/sh
+
+ETX_1="HDMI-0"
+EXT_2="DP-3"
+INT="eDP-1-1"
+
+ext1=$(xrandr | grep "$EXT_1 connected")
+ext2=$(xrandr | grep "$EXT_2 connected")
+
+if [ "$ext1" ]; then
+	if [ "$ext2" ]; then
+		/usr/local/etc/display-manager/dual_external
+	else
+		/usr/local/etc/display-manager/single_external
+	fi
+else
+	/usr/local/etc/display-manager/internal
+fi
+
